@@ -7,6 +7,7 @@ var fs = require('fs');
 
 describe('gulp-minify-html', function() {
 	var filename = __dirname + '/fixture/index.html';
+	var filenameDrupalcores = __dirname + '/fixture/drupalcores.html';
 	it('should minify my files when not given options', function(done) {
 		return gulp.src(filename)
 			.pipe(minifyHTML())
@@ -55,6 +56,16 @@ describe('gulp-minify-html', function() {
 	it('should do nothing when given nothing', function(done) {
 		return gulp.src('')
 			.pipe(minifyHTML())
+			.pipe(through.obj(function(file, encoding, callback) {
+				done();
+			}));
+	});
+
+	it('minify drupalcores.html', function(done) {
+		var opt = {comments:true, loose:true};
+		return gulp.src(filenameDrupalcores)
+			.pipe(minifyHTML(opt))
+			.pipe(gulp.dest('./dist/'))
 			.pipe(through.obj(function(file, encoding, callback) {
 				done();
 			}));
